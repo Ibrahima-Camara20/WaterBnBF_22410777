@@ -1,6 +1,5 @@
 #include "makeJSON.h"
 
-float lightThreshold = 2000.0;
 
 void updateValues( esp_model *esp, int luminosity, float temperature, int fanSpeed, bool coolerState, bool heaterState, bool fireDetected, float sb, float sh){
   esp->luminosity = luminosity;
@@ -68,17 +67,8 @@ StaticJsonDocument<1000> makeJSON_fromStatus(esp_model *em){
 
   // Piscine section (Added from mqtt_full)
   JsonObject piscine = doc.createNestedObject("piscine");
-  piscine["occuped"] = (em->luminosity > lightThreshold) ? true :  false;
+  piscine["occuped"] = (em->luminosity > LIGHTMAX) ? true :  false;
   piscine["hotspot"] = em->isHotspot;
 
   return doc;
 }
-/*
-StaticJsonDocument<1000> makeJSON_fromlocation(double lat, double lon) {
-    StaticJsonDocument<1000> doc;
-    JsonObject gps = doc.createNestedObject("gps");
-    gps["lat"] = lat;
-    gps["lon"] = lon;
-    return doc;
-}
-*/

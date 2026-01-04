@@ -54,9 +54,6 @@ def openthedoor():
     session['idswp'] = idswp
     print("\n Peer = {}".format(idu))
 
-    # ip addresses of the machine asking for opening
-    ip_addr = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
-
     granted = "NO"
     
     # 1. Check if user exists
@@ -142,8 +139,10 @@ def handle_mqtt_message(client, userdata, msg):
     try:
         ident = dic["info"]["ident"]
         occuped = dic["piscine"]["occuped"] # Boolean: True if occupied (Yellow), False if free (Green)
-        
+        # ident = P__22410777 how to get just the number ?
+        ident = ident.split("_")[2] 
         # Update global state
+
         pool_status[ident] = occuped
         print(f"\n Updated status for {ident}: Occupied={occuped}")
         

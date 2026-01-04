@@ -31,11 +31,6 @@ struct esp_model {
     String IP;
 };
 
-// Static initializations
-inline const char* esp_model::room = "512";
-inline const char* esp_model::address = "Les lucioles";
-inline const char* esp_model::target_ip = "127.0.0.1";
-
 // esp_model *esp; // Removed global variable definition
 extern float lightThreshold;
 

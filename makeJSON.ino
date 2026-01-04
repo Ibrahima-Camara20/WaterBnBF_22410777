@@ -35,11 +35,11 @@ StaticJsonDocument<1000> makeJSON_fromStatus(esp_model *em){
 
   // Location section
   JsonObject location = doc.createNestedObject("location");
-  location["room"] = "200";
+  location["room"] = "404";
   JsonObject gps = location.createNestedObject("gps");
   gps["lat"] = em->latitude;
   gps["lon"] = em->longitude;
-  location["address"] = "Jean Médecin";
+  location["address"] = "Monaco Monte Carlo";
 
   // Regul section
   JsonObject regul = doc.createNestedObject("regul");

@@ -10,7 +10,7 @@
 
 // MQTT Configuration
 #define MQTT_MAX_PACKET_SIZE 1024
-#define MQTT_SERVER "test.mosquitto.org"
+#define MQTT_SERVER "broker.hivemq.com"
 #define MQTT_PORT 1883
 #define MQTT_TOPIC "uca/iot/piscine"
 

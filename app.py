@@ -91,7 +91,7 @@ def publish_message():
     print(f"\n publish_result is {publish_result}\n") 
     return  jsonify({'code': publish_result[0]})
     
-app.config['MQTT_BROKER_URL'] =  "test.mosquitto.org"
+app.config['MQTT_BROKER_URL'] =  "broker.hivemq.com"
 app.config['MQTT_BROKER_PORT'] = 1883
 app.config['MQTT_TLS_ENABLED'] = False  # If your broker supports TLS, set it True
 

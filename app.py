@@ -133,7 +133,9 @@ def handle_mqtt_message(client, userdata, msg):
         ident = dic["info"]["ident"]
         occuped = dic["piscine"]["occuped"] # Boolean: True if occupied (Yellow), False if free (Green)
         # ident = P__22410777 how to get just the number ?
-        ident = ident.split("_")[2] 
+        # test if ident start with ? P__ 
+        if ident.startswith("P__"):
+            ident = ident.split("P__")[1] 
         # Update global state
 
         pool_status[ident] = occuped

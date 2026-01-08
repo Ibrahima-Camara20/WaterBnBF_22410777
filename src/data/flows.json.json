@@ -707,7 +707,7 @@
         "id": "2440edb5d689cbd1",
         "type": "mqtt-broker",
         "name": "Mosquitto broker",
-        "broker": "test.mosquitto.org",
+        "broker": "broker.hivemq.com",
         "port": "1883",
         "tls": "",
         "clientid": "ibog",
@@ -769,7 +769,7 @@
         "hidden": false
     },
     {
-        "id": "56a8c971ca660cb4",
+        "id": "6039f960f6852da5",
         "type": "global-config",
         "env": [],
         "modules": {

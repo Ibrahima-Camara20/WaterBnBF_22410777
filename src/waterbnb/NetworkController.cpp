@@ -49,7 +49,7 @@ void NetworkController::connectMQTT() {
     if (mqttClient.connect(clientId.c_str())) {
       Serial.println("connected");
       mqttClient.subscribe(MQTT_TOPIC);
-      mqttClient.subscribe("uca/iot/piscine"); // Subscribe to pool topic
+      mqttClient.subscribe(BACK_TO_ESP_TOPIC);
       subscribeAccess();
     } else {
       Serial.print("failed, rc=");
@@ -117,7 +117,7 @@ double NetworkController::haversine(double lat1, double lon1, double lat2,
 
 void NetworkController::handleMessage(char *topic, byte *payload,
                                       unsigned int length) {
-  handleAccessTopic(topic, payload, length);
+  handleAccessTopic(BACK_TO_ESP_TOPIC, payload, length);
 
   String message;
   for (int i = 0; i < length; i++) {
@@ -193,10 +193,7 @@ void NetworkController::subscribeAccess() {
 
 void NetworkController::handleAccessTopic(char *topic, byte *payload,
                                           unsigned int length) {
-  String expectedTopic = "uca/iot/piscine/";
-  expectedTopic += hostname;
-  expectedTopic += "/access";
-
+  String expectedTopic = "uca/iot/piscine/22410777/access";
   if (String(topic) == expectedTopic) {
     String message;
     for (int i = 0; i < length; i++) {

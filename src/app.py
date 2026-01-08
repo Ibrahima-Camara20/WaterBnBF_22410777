@@ -10,9 +10,9 @@ from flask import render_template
 from flask_mqtt import Mqtt
 
 # Import custom modules
-from db_config import init_database
-from mqtt_handler import temp_manager
-import access_logger
+from src.api.db_config import init_database
+from src.api.mqtt_handler import temp_manager
+from src.api import access_logger
 
 # Global state
 pool_status = {}
@@ -35,30 +35,22 @@ def openthedoor():
     session['idu'] = idu
     session['idswp'] = idswp
     print("\n Peer = {}".format(idu))
-
     granted = "NO"
     # 1. Check if user exists
     if db_manager.user_exists(idu):
-        # 2. Check if pool exists and is available (NOT occupied)
-        # Use .get() to avoid KeyError if pool not in status dict
         is_occupied = pool_status.get(idswp, False)  # Default to False (available) if unknown
-        
         if not is_occupied:
             granted = "YES"
-            print(f"Access GRANTED for {idu} to {idswp}")
-            # Send Green command
             topic = f"uca/iot/piscine/{idswp}/access"
             message = json.dumps({"command": "GRANTED", "user": idu})
             mqtt_client.publish(topic, message, qos=1)
         else:
             print(f"Access REFUSED: {idswp} is OCCUPIED")
-            # Send Red command (Occupied)
             topic = f"uca/iot/piscine/{idswp}/access"
             message = json.dumps({"command": "DENIED", "reason": "Occupied"})
             mqtt_client.publish(topic, message, qos=1) 
     else:
         print(f"Access REFUSED: User {idu} not found")
-        # Send Red command (Invalid User)
         if idswp:
             topic = f"uca/iot/piscine/{idswp}/access"
             message = json.dumps({"command": "DENIED", "reason": "Invalid User"})
@@ -116,34 +108,21 @@ except Exception as e:
 
 @mqtt_client.on_message()
 def handle_mqtt_message(client, userdata, msg):
-    global topicname
-    
-    print("\n msg.topic = {}".format(msg.topic))
-    print("\n topicname = {}".format(topicname))
-    
+    global topicname    
     if (msg.topic == topicname) : # cf https://stackoverflow.com/questions/63580034/paho-updating-userdata-from-on-message-callback
         decoded_message =str(msg.payload.decode("utf-8"))
-        #print("\ndecoded message received = {}".format(decoded_message))
         dic =json.loads(decoded_message) # from string to dict
-        print("\n Dictionnary  received = {}".format(dic))
 
     #-----------------------------------------------------------------------------
     # Update pool status and temperature
     try:
         ident = dic["info"]["ident"]
         occuped = dic["piscine"]["occuped"] # Boolean: True if occupied (Yellow), False if free (Green)
-        # ident = P__22410777 how to get just the number ?
-        # test if ident start with ? P__ 
+
         if ident.startswith("P__"):
             ident = ident.split("P__")[1] 
-        # Update global state
-
         pool_status[ident] = occuped
-        print(f"\n Updated status for {ident}: Occupied={occuped}")
-        
-        # 🌡️ Update temperature data
         temp_manager.process_mqtt_message(dic)
-        
     except KeyError as e:
         print(f"KeyError processing MQTT message: {e}")
 

@@ -4,7 +4,7 @@ from pymongo.server_api import ServerApi
 
 
 class DatabaseManager:    
-    def __init__(self, uri, admin_mode=True, csv_file="usersM1_2026.csv"):
+    def __init__(self, uri, admin_mode=True, csv_file="../data/usersM1_2026.csv"):
         self.uri = uri
         self.admin_mode = admin_mode
         self.csv_file = csv_file

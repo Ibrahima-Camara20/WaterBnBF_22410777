@@ -9,8 +9,7 @@ class TemperatureManager:
             "temp": float(temperature),
             "updated_at": datetime.now()
         }
-        print(f"Temperature updated for pool {pool_id}: {temperature}°C")
-    
+            
     def get_temperature(self, pool_id):
         if pool_id in self.pool_temperatures:
             temp_data = self.pool_temperatures[pool_id]
